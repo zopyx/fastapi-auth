@@ -33,5 +33,3 @@ ignore = ["ANN101", "PTH107", "PTH110" , "FA102", "FA100", "DTZ003", "ANN001", "
 
 [tool.ruff]
 line-length = 120
-
-
