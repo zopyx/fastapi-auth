@@ -3,13 +3,10 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from starlette import status
 from starlette.responses import HTMLResponse
 
-from ..dependencies import MyDeps, get_deps, get_database, DependencyAllRoles
-from ..logger import LOG
-from ..user import User, authenticate_user
+from .dependencies import MyDeps, get_deps, get_database, DependencyAllRoles
+from .logger import LOG
+from ..user import User
 from ..jinja2_templates import templates
-from ..arangodb import get_users_collection, get_database
-
-from .. import queries
 
 
 SECRET_KEY = "my_secret_key2"
@@ -34,7 +31,7 @@ async def logout(
     deps: MyDeps = Depends(DependencyAllRoles),
 ):
     request.session.clear()
-    message = "Sie wurden abgemeldet."
+    message = "You have been logged out."
     return RedirectResponse(url=f"/?message={message}")
 
 
@@ -64,7 +61,7 @@ async def login_post(
 
         return RedirectResponse(f"/?message={message}", status_code=status.HTTP_302_FOUND)
 
-    message = "Keine Zugangsberechtigung oder falsche Zugangsdaten."
+    message = "You could not be logged in. Please try again."
     LOG.error(f"User {user.id} unable to login")
     return templates.TemplateResponse(
         "login.html",
@@ -86,19 +83,3 @@ async def user_info(
     return templates.TemplateResponse(
         "user_info.html", {"request": request, "user": deps.user, "message": message, "user_data": user_data}
     )
-
-
-@router.post("/update-user-info")
-async def update_user_info(
-    request: Request,
-    abschreibung: str = Form(...),
-    deps: MyDeps = Depends(DependencyAllRoles),
-):
-    if deps.user.is_anonymous:
-        message = "Sie sind nicht angemeldet."
-        return RedirectResponse(f"/?message={message}", status_code=status.HTTP_302_FOUND)
-
-    queries.update_user_abschreibung(db=deps.db, user=deps.user, abschreibung=abschreibung)
-
-    message = "Ihre Daten wurden aktualisiert."
-    return RedirectResponse(f"/auth/user-info?message={message}", status_code=status.HTTP_302_FOUND)
