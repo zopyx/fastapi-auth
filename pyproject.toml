@@ -1,0 +1,37 @@
+[project]
+name = "fastapi-auth"
+description = "FastAPI authentication and authorization"
+version = "0.1.0"
+authors = [
+    { name = "Andreas Jung", email = "info@zopyx.com" }
+]
+dependencies = [
+    "fastapi",
+    "pydantic",
+    "pydantic-settings",
+    "uvicorn",
+    "markdown",
+    "starlette-session",
+    "loguru",
+    "bcrypt",
+    "jinja2",
+    "python-multipart",
+    "typer",
+    "typeguard",
+]
+
+[tool.setuptools]
+packages = ["fastapi_auth"]
+
+[project.scripts]
+fastapi-auth-user-admin= "fastapi_auth.user_cmd:main"
+
+[tool.ruff.lint]
+#select = ["ALL"]
+ignore = ["ANN101", "PTH107", "PTH110" , "FA102", "FA100", "DTZ003", "ANN001", "ERA001", "FBT002", "E712"]
+
+
+[tool.ruff]
+line-length = 120
+
+
