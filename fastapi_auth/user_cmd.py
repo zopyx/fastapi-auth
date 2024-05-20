@@ -5,9 +5,10 @@ import os
 import typer
 from pydantic_settings import BaseSettings
 
-from kataster.logger import LOG
-from kataster.user import ROLES_REGISTRY
-from kataster.user_management import UserManagement
+from .logger import LOG
+
+# from kataster.user import ROLES_REGISTRY
+from .user_management import UserManagement
 
 DEFAULT_DB_FILENAME = os.path.abspath("user_management.db")
 
@@ -35,10 +36,10 @@ def add(username: str, password: str, roles: str) -> None:
     um.create_db()
 
     roles_lst = roles.split(",")
-    allowed_roles = ROLES_REGISTRY.all_role_names()
-    if not all(role in allowed_roles for role in roles_lst):
-        msg = f"Invalid roles: {roles}"
-        raise ValueError(msg)
+    #    allowed_roles = ROLES_REGISTRY.all_role_names()
+    #    if not all(role in allowed_roles for role in roles_lst):
+    #        msg = f"Invalid roles: {roles}"
+    #        raise ValueError(msg)
 
     um.add_user(username, password, roles)
     LOG.debug(f"Added user {username} with roles {roles}")

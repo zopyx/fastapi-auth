@@ -14,6 +14,7 @@ class User(BaseModel):
     description: str = Field(..., description="Description of the user")
     is_anonymous: bool = True
     roles: list[Role] = []
+    properties: dict = {}
 
     def __str__(self) -> str:
         """Return a string representation of the user."""
@@ -24,3 +25,10 @@ class User(BaseModel):
     def has_role(self, role: Role) -> bool:
         """Check if the user has the required role."""
         return role in self.roles
+
+
+ANOYMOUS_USER = User(
+    name="anonymous",
+    description="Anonymous user",
+    is_anonymous=True,
+)

@@ -3,10 +3,13 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from starlette import status
 from starlette.responses import HTMLResponse
 
-from .dependencies import MyDeps, get_deps, get_database, DependencyAllRoles
+from .dependencies import get_user
 from .logger import LOG
-from ..user import User
-from ..jinja2_templates import templates
+from .users import User
+from .user_management import UserManagement, USER_MANAGEMENT_SETTINGS
+from .jinja2_templates import templates
+
+from starlette.middleware.sessions import SessionMiddleware
 
 
 SECRET_KEY = "my_secret_key2"
@@ -14,21 +17,32 @@ SECRET_KEY = "my_secret_key2"
 router = APIRouter()
 
 
+def install_middleware(app):
+    app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
+
+
 @router.get("/login", response_class=HTMLResponse)
 async def login(
     request: Request,
-    deps: MyDeps = Depends(get_deps),
+    user: User = Depends(get_user),
+    message: str = None,
+    error_message: str = None,
 ):
     return templates.TemplateResponse(
         "login.html",
-        {"request": request, "user": deps.user},
+        {
+            "request": request,
+            "user": user,
+            "message": message,
+            "error_message": error_message,
+        },
     )
 
 
 @router.get("/logout")
 async def logout(
     request: Request,
-    deps: MyDeps = Depends(DependencyAllRoles),
+    user: User = Depends(get_user),
 ):
     request.session.clear()
     message = "You have been logged out."
@@ -40,43 +54,36 @@ async def login_post(
     request: Request,
     username: str = Form(...),
     password: str = Form(...),
-    deps: MyDeps = Depends(get_deps),
+    user: User = Depends(get_user),
 ):
-    user: User = authenticate_user(
-        username=username,
-        password=password,
-    )
+    um = UserManagement(USER_MANAGEMENT_SETTINGS.db_filename)
+    user_data = um.get_user(username, password)
+    print(user)
 
-    # Ensure that the users collection exists
-    db = get_database()
-    get_users_collection(db)
-
-    # Add your authentication logic here
-    if not user.is_anonymous:
-        request.session["username"] = user.id
+    if user_data is not None:
+        request.session["username"] = user_data["username"]
         request.session["is_authenticated"] = True
-        request.session["role"] = user.role.name
-        message = f"Willkommen {user.name}. Sie sind jetzt angemeldet."
-        LOG.info(f"User {user.id} logged in")
-
+        request.session["roles"] = user_data["roles"]
+        message = f"Welcome {user_data['username']}. You are now logged in."
+        LOG.info(f"User {user_data['username']} logged in")
         return RedirectResponse(f"/?message={message}", status_code=status.HTTP_302_FOUND)
 
-    message = "You could not be logged in. Please try again."
-    LOG.error(f"User {user.id} unable to login")
-    return templates.TemplateResponse(
-        "login.html",
-        {
-            "request": request,
-            "user": user,
-            "error_message": message,
-        },
-    )
+    else:
+        message = f"You {username} could not be logged in. Please try again."
+        LOG.error(message)
+        return templates.TemplateResponse(
+            "login.html",
+            {
+                "request": request,
+                "error_message": message,
+            },
+        )
 
 
 @router.get("/user-info", response_class=HTMLResponse)
 async def user_info(
     request: Request,
-    deps: MyDeps = Depends(DependencyAllRoles),
+    user: User = Depends(get_user),
 ):
     user_data = queries.get_user_information(deps.db, deps.user)
     message = request.query_params.get("message", None)
