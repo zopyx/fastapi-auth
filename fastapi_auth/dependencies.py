@@ -1,11 +1,8 @@
-from typing import Optional
 
-from fastapi import Depends, Request
-from pydantic import BaseModel, ConfigDict
+from fastapi import Request
 
 # from .user import User, get_user, Unauthorized
 
-from .logger import LOG
 from .users import User, ANOYMOUS_USER
 
 

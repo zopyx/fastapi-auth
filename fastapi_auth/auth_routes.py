@@ -1,7 +1,6 @@
 from fastapi import Depends, Form, Request, APIRouter
 from fastapi.responses import HTMLResponse, RedirectResponse
 from starlette import status
-from starlette.responses import HTMLResponse
 
 from .dependencies import get_user
 from .logger import LOG
@@ -82,15 +81,3 @@ async def login_post(
                 "error_message": message,
             },
         )
-
-
-@router.get("/user-info", response_class=HTMLResponse)
-async def user_info(
-    request: Request,
-    user: User = Depends(get_user),
-):
-    user_data = queries.get_user_information(deps.db, deps.user)
-    message = request.query_params.get("message", None)
-    return templates.TemplateResponse(
-        "user_info.html", {"request": request, "user": deps.user, "message": message, "user_data": user_data}
-    )

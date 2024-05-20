@@ -14,12 +14,12 @@ def test_role_creation():
 
 def test_role_without_name():
     with pytest.raises(ValidationError):
-        role = Role(description="Admin role")
+        Role(description="Admin role")
 
 
 def test_role_without_description():
     with pytest.raises(ValidationError):
-        role = Role(name="admin")
+        Role(name="admin")
 
 
 def test_role_with_permissions():
@@ -31,7 +31,7 @@ def test_role_with_permissions():
     assert role.permissions == permissions
 
 
-def test_role_creation():
+def test_role_creation2():
     perm1 = Permission(name="read", description="Read permission")
     perm2 = Permission(name="write", description="Write permission")
     role = Role(name="admin", description="Adminstrator role", permissions=[perm1, perm2])

@@ -12,12 +12,12 @@ def test_user_creation():
 
 def test_user_without_name():
     with pytest.raises(ValidationError):
-        user = User(description="Test user")
+        User(description="Test user")
 
 
 def test_user_without_description():
     with pytest.raises(ValidationError):
-        user = User(name="John Doe")
+        User(name="John Doe")
 
 
 def test_user_with_roles():

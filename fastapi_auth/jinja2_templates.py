@@ -1,13 +1,10 @@
 """Jinja2 templates for FastAPI."""
 
-from datetime import datetime
 
-from typeguard import typechecked
 
 from fastapi.templating import Jinja2Templates
 from jinja2 import Environment, PackageLoader
 
-from .users import User
 
 
 env = Environment(loader=PackageLoader("fastapi_auth", "templates"))

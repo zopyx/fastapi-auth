@@ -13,9 +13,9 @@ def test_permission_creation():
 
 def test_permission_without_name():
     with pytest.raises(ValidationError):
-        permission = Permission(description="Can read data")
+        Permission(description="Can read data")
 
 
 def test_permission_without_description():
     with pytest.raises(ValidationError):
-        permission = Permission(name="read")
+        Permission(name="read")

@@ -13,7 +13,6 @@ app.mount("/auth", auth_router)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
-from . import user_management
 
 
 @app.get("/", response_class=HTMLResponse)
