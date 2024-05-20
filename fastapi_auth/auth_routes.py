@@ -58,12 +58,16 @@ async def login_post(
 ):
     um = UserManagement(USER_MANAGEMENT_SETTINGS.db_filename)
     user_data = um.get_user(username, password)
-    print(user)
 
     if user_data is not None:
-        request.session["username"] = user_data["username"]
-        request.session["is_authenticated"] = True
-        request.session["roles"] = user_data["roles"]
+        user = User(
+            name=user_data["username"],
+            description=user_data["username"],
+            is_anonymous=False,
+            #            roles=user_data["roles"],
+            roles=[],
+        )
+        request.session["user"] = user.model_dump()
         message = f"Welcome {user_data['username']}. You are now logged in."
         LOG.info(f"User {user_data['username']} logged in")
         return RedirectResponse(f"/?message={message}", status_code=status.HTTP_302_FOUND)

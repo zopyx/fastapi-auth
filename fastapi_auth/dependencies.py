@@ -11,17 +11,6 @@ from .users import User, ANOYMOUS_USER
 
 def get_user(request: Request) -> User:
     """A dependency to get the dependencies."""
-    print(request.session)
-
-    session = request.session
-    if "username" not in session:
+    if "user" not in request.session:
         return ANOYMOUS_USER
-
-    else:
-        return User(
-            name=session["username"],
-            description=session["username"],
-            is_anonymous=False,
-            #        roles=session["roles"],
-            roles=[],
-        )
+    return User(**request.session["user"])
