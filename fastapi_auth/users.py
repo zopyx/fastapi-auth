@@ -26,6 +26,11 @@ class User(BaseModel):
         """Check if the user has the required role."""
         return role in self.roles
 
+    @property
+    def is_authenticated(self) -> bool:
+        """Check if the user is authenticated."""
+        return not self.is_anonymous
+
 
 ANOYMOUS_USER = User(
     name="anonymous",

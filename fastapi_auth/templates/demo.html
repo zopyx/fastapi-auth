@@ -6,7 +6,7 @@
     <div>Current user:</div>
     {% if not user.is_anonymous %}
     <ul>
-      <li>Username: {{ user.username }}</li>
+      <li>Username: {{ user.name }}</li>
       <li>Is anonymous: {{ user.is_anonymous }}</li>
       <li>Logged in: {{user.properties.logged_in}}</li>
       <li>Lifetime: {{user.properties.lifetime}}</li>
