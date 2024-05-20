@@ -59,3 +59,6 @@ class RolesRegistry:
     def as_dict(self) -> dict[str, "Role"]:
         """Return the roles as a dictionary."""
         return self.roles
+
+
+ROLES_REGISTRY = RolesRegistry()

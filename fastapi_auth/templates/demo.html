@@ -3,7 +3,14 @@
 <div class="container">
   <h1>Login</h1>
   <div class="card" id="login-card">
-    <div>Current user: {{user}}</div>
+    <div>Current user:</div>
+    {% if not user.is_anonymous %}
+    <ul>
+      <li>Username: {{ user.username }}</li>
+      <li>Is anonymous: {{ user.is_anonymous }}</li>
+      <li>Roles: {{user.roles}}</li>
+    </ul>
+    {% else %} not logged{% endif %}
   </div>
 </div>
 

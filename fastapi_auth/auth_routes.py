@@ -7,6 +7,7 @@ from .logger import LOG
 from .users import User
 from .user_management import UserManagement, USER_MANAGEMENT_SETTINGS
 from .jinja2_templates import templates
+from .roles import ROLES_REGISTRY
 
 from starlette.middleware.sessions import SessionMiddleware
 
@@ -59,12 +60,15 @@ async def login_post(
     user_data = um.get_user(username, password)
 
     if user_data is not None:
+        roles = user_data["roles"]
+        roles = [ROLES_REGISTRY.get_role(r) for r in roles]
         user = User(
             name=user_data["username"],
             description=user_data["username"],
             is_anonymous=False,
-            #            roles=user_data["roles"],
-            roles=[],
+            roles=roles,
+            #            #            roles=user_data["roles"],
+            #            roles=[],
         )
         request.session["user"] = user.model_dump()
         message = f"Welcome {user_data['username']}. You are now logged in."
