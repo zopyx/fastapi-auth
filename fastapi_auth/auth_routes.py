@@ -8,11 +8,14 @@ from .users import User
 from .user_management import UserManagement, USER_MANAGEMENT_SETTINGS
 from .jinja2_templates import templates
 from .roles import ROLES_REGISTRY
+from datetime import datetime, timezone
 
 from starlette.middleware.sessions import SessionMiddleware
 
 
 SECRET_KEY = "my_secret_key2"
+LIFE_TIME = 3600 * 24
+
 
 router = APIRouter()
 
@@ -61,14 +64,17 @@ async def login_post(
 
     if user_data is not None:
         roles = user_data["roles"]
-        roles = [ROLES_REGISTRY.get_role(r) for r in roles]
+        roles = [ROLES_REGISTRY.get_role(r) for r in roles if ROLES_REGISTRY.has_role(r)]
         user = User(
             name=user_data["username"],
             description=user_data["username"],
             is_anonymous=False,
             roles=roles,
-            #            #            roles=user_data["roles"],
-            #            roles=[],
+            properties=dict(
+                source="internal",
+                logged_in=datetime.now(timezone.utc).isoformat(),
+                lifetime=LIFE_TIME,
+            ),
         )
         request.session["user"] = user.model_dump()
         message = f"Welcome {user_data['username']}. You are now logged in."

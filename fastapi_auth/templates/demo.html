@@ -8,6 +8,8 @@
     <ul>
       <li>Username: {{ user.username }}</li>
       <li>Is anonymous: {{ user.is_anonymous }}</li>
+      <li>Logged in: {{user.properties.logged_in}}</li>
+      <li>Lifetime: {{user.properties.lifetime}}</li>
       <li>Roles: {{user.roles}}</li>
     </ul>
     {% else %} not logged{% endif %}
