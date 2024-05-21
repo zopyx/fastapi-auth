@@ -131,6 +131,15 @@ fastapi-auth-user-admin list-users
 fastapi-auth-user-admin set-password <username> <new-password> 
 ```
 
+## Internals
+
+The implementation is based on top of the `starlette-session`
+(https://pypi.org/project/starlette-session/) middleware. The user information
+is stored through a  signed cookie-based HTTP session. Session information is
+readable but not modifiable. The encryption key can be configured through an environment
+variable.
+
+
 ## Author
 
 Andreas Jung <info@zopyx.com>
