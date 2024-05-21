@@ -5,9 +5,11 @@ from ..roles import Role
 
 
 def test_user_creation():
-    user = User(name="John Doe", description="Test user")
+    user = User(name="John Doe", description="Test user", is_anonymous=False)
     assert user.name == "John Doe"
     assert user.description == "Test user"
+    assert not user.is_anonymous
+    assert user.is_authenticated
 
 
 def test_user_without_name():
