@@ -32,6 +32,8 @@ multiple roles and one role can have multiple permissions.
 Example on how to define permissions:
 
 ```
+from fastapi_auth.permissions import Permission
+
 VIEW_PERMISSION = Permission(name="view", description="View permission")
 EDIT_PERMISSION = Permission(name="edit", description="Edit permission")
 DELETE_PERMISSION = Permission(name="delete", description="Delete permission")
@@ -40,6 +42,8 @@ DELETE_PERMISSION = Permission(name="delete", description="Delete permission")
 Roles are defined this way:
 
 ```
+from fastapi_auth.permissions import  Role
+
 ADMIN_ROLE = Role(
     name="Administrator",
     description="Admin role",
@@ -60,6 +64,9 @@ VIEWER_ROLE = Role(
 Also, all roles must be registered with a global `ROLES_REGISTRY`:
 
 ```
+
+from fastapi_auth.roles import ROLES_REGISTRY
+
 ROLES_REGISTRY.register(ADMIN_ROLE)
 ROLES_REGISTRY.register(USER_ROLE)
 ROLES_REGISTRY.register(VIEWER_ROLE)
@@ -84,6 +91,8 @@ def admin(user: User = Depends(Protected(required_roles=[ADMIN_ROLE]))):
 You could also protect an endpoint using a permission:
 
 ```
+
+from fastapi_auth.dependencies import Protected
 
 @app.get("/admin")
 def admin2(user: User = Depends(Protected(required_permission=VIEW_PERMISSION))):
