@@ -8,6 +8,7 @@ from .users import User
 from .jinja2_templates import templates
 from .roles import ROLES_REGISTRY, Role
 from .permissions import Permission
+from .dependencies import Protected
 
 app = FastAPI()
 install_middleware(app)
@@ -51,3 +52,8 @@ def read_root(
         "demo.html",
         {"request": request, "user": user, "message": message, "error_message": error_message},
     )
+
+
+@app.get("/admin")
+def admin(user: User = Depends(Protected(required_roles=[ADMIN_ROLE]))):
+    return {"user": user}

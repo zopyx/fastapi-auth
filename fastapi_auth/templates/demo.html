@@ -1,4 +1,7 @@
-{% extends "base.html" %} {% block body %}
+{% extends "base.html" %}
+<!-- -->
+
+{% block body %}
 
 <div class="container">
   <h1>Login</h1>
@@ -9,11 +12,14 @@
       <li>Username: {{ user.name }}</li>
       <li>Is anonymous: {{ user.is_anonymous }}</li>
       <li>Logged in: {{user.properties.logged_in}}</li>
-      <li>Lifetime: {{user.properties.lifetime}}</li>
+      <li>Expires: {{user.properties.expires}}</li>
       <li>Roles: {{user.roles}}</li>
     </ul>
-    {% else %} not logged{% endif %}
+    {% else %}
+    <div>
+      <p>Not logged in</p>
+    </div>
+    {% endif %}
   </div>
 </div>
-
 {% endblock %}

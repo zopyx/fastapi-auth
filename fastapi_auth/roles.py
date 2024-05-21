@@ -1,3 +1,5 @@
+"""Roles module."""
+
 from pydantic import BaseModel, Field
 
 from typeguard import typechecked

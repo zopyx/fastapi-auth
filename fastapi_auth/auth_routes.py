@@ -1,6 +1,7 @@
 from fastapi import Depends, Form, Request, APIRouter
 from fastapi.responses import HTMLResponse, RedirectResponse
 from starlette import status
+from datetime import timedelta
 
 from .dependencies import get_user
 from .logger import LOG
@@ -65,6 +66,9 @@ async def login_post(
     if user_data is not None:
         roles = user_data["roles"]
         roles = [ROLES_REGISTRY.get_role(r) for r in roles if ROLES_REGISTRY.has_role(r)]
+
+        now = datetime.now(timezone.utc)
+        expires = now + timedelta(seconds=LIFE_TIME)
         user = User(
             name=user_data["username"],
             description=user_data["username"],
@@ -72,8 +76,8 @@ async def login_post(
             roles=roles,
             properties=dict(
                 source="internal",
-                logged_in=datetime.now(timezone.utc).isoformat(),
-                lifetime=LIFE_TIME,
+                logged_in=now.isoformat(),
+                expires=expires.isoformat(),
             ),
         )
         request.session["user"] = user.model_dump()
