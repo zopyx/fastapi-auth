@@ -5,7 +5,7 @@ from datetime import timedelta
 
 from .dependencies import get_user
 from .logger import LOG
-from .users import User
+from .users import User, ANONYMOUS_USER
 from .user_management import UserManagement
 from .jinja2_templates import templates
 from .roles import ROLES_REGISTRY
@@ -91,6 +91,7 @@ async def login_post(
         return templates.TemplateResponse(
             "login.html",
             {
+                "user": ANONYMOUS_USER,
                 "request": request,
                 "error_message": message,
             },

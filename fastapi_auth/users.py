@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 
 
 from .roles import Role
-
+from .permissions import Permission
 
 from typeguard import typechecked
 
@@ -26,13 +26,21 @@ class User(BaseModel):
         """Check if the user has the required role."""
         return role in self.roles
 
+    @typechecked
+    def has_permission(self, permission: Permission) -> bool:
+        """Check if the user has the required permission."""
+        for role in self.roles:
+            if permission in role.permissions:
+                return True
+        return False
+
     @property
     def is_authenticated(self) -> bool:
         """Check if the user is authenticated."""
         return not self.is_anonymous
 
 
-ANOYMOUS_USER = User(
+ANONYMOUS_USER = User(
     name="anonymous",
     description="Anonymous user",
     is_anonymous=True,

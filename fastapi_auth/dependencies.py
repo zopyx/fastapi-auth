@@ -5,7 +5,7 @@ from typeguard import typechecked
 
 # from .user import User, get_user, Unauthorized
 
-from .users import User, ANOYMOUS_USER
+from .users import User, ANONYMOUS_USER
 from .roles import Role
 from .permissions import Permission
 from .logger import LOG
@@ -14,7 +14,7 @@ from .logger import LOG
 def get_user(request: Request) -> User:
     """A dependency to get the dependencies."""
     if "user" not in request.session:
-        return ANOYMOUS_USER
+        return ANONYMOUS_USER
     return User(**request.session["user"])
 
 
@@ -24,7 +24,7 @@ class Protected:
     @typechecked
     def __init__(
         self,
-        required_permission: Optional[list[Permission]] = None,
+        required_permission: Optional[Permission] = None,
         required_roles: Optional[list[Role]] = None,
     ):
         if required_roles is None:
@@ -51,8 +51,9 @@ class Protected:
                     return user
 
         # If the user has the required permission, return the user
-        if self.required_permission and self.required_permission in user.role.permissions:
-            return user
+        if self.required_permission:
+            if user.has_permission(self.required_permission):
+                return user
 
         msg = f"Permission denied for user {user}. Required roles: {self.required_roles}, required permission: {self.required_permission}. User has role {user.roles}"
         LOG.error(msg)

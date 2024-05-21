@@ -14,7 +14,6 @@ from .dependencies import Protected
 
 # Your FastAPI app
 app = FastAPI()
-
 # install the session middleware
 install_middleware(app)
 
@@ -78,4 +77,9 @@ def read_root(
 # An unauthenticated request as ANONYMOUS_USER will be rejected.
 @app.get("/admin")
 def admin(user: User = Depends(Protected(required_roles=[ADMIN_ROLE]))):
+    return {"user": user}
+
+
+@app.get("/admin2")
+def admin(user: User = Depends(Protected(required_permission=VIEW_PERMISSION))):
     return {"user": user}
