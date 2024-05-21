@@ -18,6 +18,84 @@ An opionated authentication and authorization system for FastAPI.
 
 - see `demo_app.py`
 
+## Concepts
+
+This package is build around the following concepts:
+
+### Roles and permissions
+
+A role is assigned to a user. A user can have one or more roles.  A permission
+defines a certain certain access scope like `View entries`, `Delete entries`,
+`Update Entries`. A Role can be have multiple permissions. So a  user can have
+multiple roles and one role can have multiple permissions.
+
+Example on how to define permissions:
+
+```
+VIEW_PERMISSION = Permission(name="view", description="View permission")
+EDIT_PERMISSION = Permission(name="edit", description="Edit permission")
+DELETE_PERMISSION = Permission(name="delete", description="Delete permission")
+```
+
+Roles are defined this way:
+
+```
+ADMIN_ROLE = Role(
+    name="Administrator",
+    description="Admin role",
+    permissions=[VIEW_PERMISSION, EDIT_PERMISSION, DELETE_PERMISSION],
+)
+USER_ROLE = Role(
+    name="User",
+    description="User role",
+    permissions=[VIEW_PERMISSION, EDIT_PERMISSION],
+)
+VIEWER_ROLE = Role(
+    name="Viewer",
+    description="Viewer role",
+    permissions=[VIEW_PERMISSION],
+)
+```
+
+Also, all roles must be registered with a global `ROLES_REGISTRY`:
+
+```
+ROLES_REGISTRY.register(ADMIN_ROLE)
+ROLES_REGISTRY.register(USER_ROLE)
+ROLES_REGISTRY.register(VIEWER_ROLE)
+```
+
+
+An endpoint of a FastAPI application be protected through one permission or one
+or more roles.
+
+In this example, the `/admin` endpoint is only acceessible for an authenticated user with role `Administrator`:
+
+```
+# This is an endpoint that requires the user to be authenticated.  In this case,
+# the user must have the ADMIN_ROLE role.  It is also possible to require a
+# permission instead.  Use the Protected dependency to require authentication.
+# An unauthenticated request as ANONYMOUS_USER will be rejected.
+@app.get("/admin")
+def admin(user: User = Depends(Protected(required_roles=[ADMIN_ROLE]))):
+    return {"user": user}
+```
+
+You could also protect an endpoint using a permission:
+
+```
+
+@app.get("/admin")
+def admin2(user: User = Depends(Protected(required_permission=VIEW_PERMISSION))):
+    return {"user": user}
+
+```
+
+
+
+
+
+
 ## Author
 
 Andreas Jung <info@zopyx.com>
