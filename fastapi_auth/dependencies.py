@@ -19,7 +19,13 @@ def get_user(request: Request) -> User:
 
 
 class Protected:
-    """A dependency to protect routes."""
+    """A dependency to protect routes.  The user must have the required
+    permission or role to access the route.  Using a permission and role(s) are
+    mutually exclusive. You must specify either a permission or a list of roles.
+    This dependency should be used for authenticated routes only. only.  The
+    authenticated user must either have a specified role or one of its role must
+    support the required permission.
+    """
 
     @typechecked
     def __init__(

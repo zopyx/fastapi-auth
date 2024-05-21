@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import Depends, Form, Request, APIRouter
 from fastapi.responses import HTMLResponse, RedirectResponse
 from starlette import status
@@ -29,8 +31,8 @@ def install_middleware(app):
 async def login(
     request: Request,
     user: User = Depends(get_user),
-    message: str = None,
-    error_message: str = None,
+    message: Optional[str] = None,
+    error_message: Optional[str] = None,
 ):
     return templates.TemplateResponse(
         "login.html",

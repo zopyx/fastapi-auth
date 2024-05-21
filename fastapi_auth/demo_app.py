@@ -1,5 +1,7 @@
 """This is a demo app to show how to use the fastapi_auth package."""
 
+from typing import Optional
+
 from fastapi import FastAPI, Depends, Request
 from fastapi.staticfiles import StaticFiles
 from starlette.responses import HTMLResponse
@@ -24,9 +26,18 @@ app.mount("/auth", auth_router)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # here, we define some permissions
-VIEW_PERMISSION = Permission(name="view", description="View permission")
-EDIT_PERMISSION = Permission(name="edit", description="Edit permission")
-DELETE_PERMISSION = Permission(name="delete", description="Delete permission")
+VIEW_PERMISSION = Permission(
+    name="view",
+    description="View permission",
+)
+EDIT_PERMISSION = Permission(
+    name="edit",
+    description="Edit permission",
+)
+DELETE_PERMISSION = Permission(
+    name="delete",
+    description="Delete permission",
+)
 
 # and some roles that use these permissions
 ADMIN_ROLE = Role(
@@ -62,8 +73,8 @@ ROLES_REGISTRY.register(VIEWER_ROLE)
 def read_root(
     request: Request,
     user: User = Depends(get_user),
-    message: str = None,
-    error_message: str = None,
+    message: Optional[str] = None,
+    error_message: Optional[str] = None,
 ):
     return templates.TemplateResponse(
         "demo.html",
@@ -81,5 +92,5 @@ def admin(user: User = Depends(Protected(required_roles=[ADMIN_ROLE]))):
 
 
 @app.get("/admin2")
-def admin(user: User = Depends(Protected(required_permission=VIEW_PERMISSION))):
+def admin2(user: User = Depends(Protected(required_permission=VIEW_PERMISSION))):
     return {"user": user}
