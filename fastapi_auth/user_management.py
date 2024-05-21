@@ -10,18 +10,9 @@ from typeguard import typechecked
 from typing import Optional
 
 from .logger import LOG
+from .auth_config import AUTH_SETTINGS
 
-DB_FILE = "user_management.db"
-
-
-class UserManagementSettings(BaseSettings):
-    """Settings for the user management."""
-
-    db_filename: str = DB_FILE
-
-
-USER_MANAGEMENT_SETTINGS = UserManagementSettings()
-LOG.info(f"Using database file {USER_MANAGEMENT_SETTINGS.db_filename}")
+LOG.info(f"Using database file {AUTH_SETTINGS.db_name}")
 
 
 class UserManagement:

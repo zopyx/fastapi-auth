@@ -6,17 +6,10 @@ import typer
 from pydantic_settings import BaseSettings
 
 from .logger import LOG
+from .auth_config import AUTH_SETTINGS
 
 # from kataster.user import ROLES_REGISTRY
 from .user_management import UserManagement
-
-DEFAULT_DB_FILENAME = os.path.abspath("user_management.db")
-
-
-class UserManagementSettings(BaseSettings):
-    """Settings for the user management."""
-
-    db_filename: str = DEFAULT_DB_FILENAME
 
 
 app = typer.Typer()
@@ -24,9 +17,8 @@ app = typer.Typer()
 
 def get_user_management() -> UserManagement:
     """Get a UserManagement instance."""
-    user_management_settings = UserManagementSettings()
-    LOG.debug(f"Using database file {user_management_settings.db_filename}")
-    return UserManagement(user_management_settings.db_filename)
+    LOG.debug(f"Using database file {AUTH_SETTINGS.db_name}")
+    return UserManagement(AUTH_SETTINGS.db_name)
 
 
 @app.command()
