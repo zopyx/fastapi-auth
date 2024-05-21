@@ -110,10 +110,13 @@ from fastapi_auth.auth_routes import install_middleware
 
 # Your FastAPI app
 app = FastAPI()
+
 # install the session middleware
 install_middleware(app)
+
 # add endpoints for authentication examples
 app.mount("/auth", auth_router)
+
 # add static files (for demo login form)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 ```
