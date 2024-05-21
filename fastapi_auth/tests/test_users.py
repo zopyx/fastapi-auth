@@ -10,6 +10,7 @@ def test_user_creation():
     assert user.description == "Test user"
     assert not user.is_anonymous
     assert user.is_authenticated
+    user_str = str(user)
 
 
 def test_user_without_name():
