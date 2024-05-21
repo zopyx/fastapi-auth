@@ -1,5 +1,4 @@
 from fastapi.testclient import TestClient
-from kataster.app import app
 import pytest
 from ..user_management import UserManagement
 import tempfile

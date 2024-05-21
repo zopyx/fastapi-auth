@@ -1,9 +1,6 @@
 """Command line interface for user management."""
 
-import os
-
 import typer
-from pydantic_settings import BaseSettings
 
 from .logger import LOG
 from .auth_config import AUTH_SETTINGS

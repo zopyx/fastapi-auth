@@ -4,7 +4,6 @@ import os
 import sqlite3
 
 import bcrypt
-from pydantic_settings import BaseSettings
 
 from typeguard import typechecked
 from typing import Optional
@@ -26,6 +25,9 @@ class UserManagement:
     @property
     def connection(self) -> sqlite3.Connection:
         """Return the connection to the database."""
+        if not os.path.exists(self.db_filename):
+            msg = f"Database file {self.db_filename} does not exist."
+            raise ValueError(msg)
         return sqlite3.connect(self.db_filename)
 
     @typechecked
