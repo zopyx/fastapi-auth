@@ -13,8 +13,8 @@ from datetime import datetime, timezone
 
 from starlette.middleware.sessions import SessionMiddleware
 
+from .auth_config import AUTH_SETTINGS
 
-SECRET_KEY = "my_secret_key2"
 LIFE_TIME = 3600 * 24
 
 
@@ -22,7 +22,7 @@ router = APIRouter()
 
 
 def install_middleware(app):
-    app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
+    app.add_middleware(SessionMiddleware, secret_key=AUTH_SETTINGS.secret_key.get_secret_value())
 
 
 @router.get("/login", response_class=HTMLResponse)
