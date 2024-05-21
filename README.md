@@ -100,6 +100,24 @@ def admin2(user: User = Depends(Protected(required_permission=VIEW_PERMISSION)))
 
 ```
 
+## Installation of the session middleware
+
+In order to instrumentize your application, you need call `install_middleware(app)` with your
+custom FastAPI `app` object.
+
+```
+from fastapi_auth.auth_routes import install_middleware
+
+# Your FastAPI app
+app = FastAPI()
+# install the session middleware
+install_middleware(app)
+# add endpoints for authentication examples
+app.mount("/auth", auth_router)
+# add static files (for demo login form)
+app.mount("/static", StaticFiles(directory="static"), name="static")
+```
+
 ## User management
 
 For now, `fastapi-auth` stores user accounts inside a Sqlite database. There is
