@@ -3,9 +3,11 @@ import pytest
 from ..user_management import UserManagement
 import tempfile
 
+from ..demo_app import app
 
-admin_username = "test_user"
-admin_password = "test_password"
+
+admin_username = "admin"
+admin_password = "admin"
 
 
 @pytest.fixture(scope="module")
@@ -20,9 +22,6 @@ def user_management():
     temp_db_filename = tempfile.mktemp(suffix=".db")
     um = UserManagement(temp_db_filename)
     um.create_db()
-    um.add_user(admin_username, admin_password, "Administrator")
-    um.add_user("adhei", "adhei", "Kunde")
-    um.add_user("fire", "fire", "Feuerwehr")
     um.add_user("admin", "admin", "Administrator")
     yield um
     UserManagement.__init__ = old_init
