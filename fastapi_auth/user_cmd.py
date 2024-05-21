@@ -5,7 +5,6 @@ import typer
 from .logger import LOG
 from .auth_config import AUTH_SETTINGS
 
-# from kataster.user import ROLES_REGISTRY
 from .user_management import UserManagement
 
 
