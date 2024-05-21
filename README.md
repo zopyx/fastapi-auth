@@ -91,10 +91,36 @@ def admin2(user: User = Depends(Protected(required_permission=VIEW_PERMISSION)))
 
 ```
 
+## User management
 
+For now, `fastapi-auth` stores user accounts inside a Sqlite database. There is
+the `fastapi-auth-user-admin` utility for managing user accounts through the
+commandline.  There is no support (and there will be no support) for managing
+user accounts through a web admin interface.
 
+### adding user
 
+```
+fastapi-auth-user-admin add <username> <password> "Role1,Role2..."
+```
 
+### delete user
+
+```
+fastapi-auth-user-admin delete <username>
+```
+
+### list users
+
+```
+fastapi-auth-user-admin list-users 
+```
+
+### set password users
+
+```
+fastapi-auth-user-admin set-password <username> <new-password> 
+```
 
 ## Author
 
