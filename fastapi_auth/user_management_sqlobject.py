@@ -1,15 +1,19 @@
 """Module for managing users in a SQLite database."""
 
 from sqlmodel import SQLModel, Field, Session, create_engine, select
-from datetime import datetime
+from datetime import datetime, timezone
 import bcrypt
+
+
+def utc_now():
+    return datetime.now(timezone.utc)
 
 
 class User(SQLModel, table=True):
     username: str = Field(primary_key=True)
     password: str
     roles: str
-    created: datetime = Field(default_factory=datetime.utcnow)
+    created: datetime = Field(default_factory=utc_now)
 
 
 class UserManagement:

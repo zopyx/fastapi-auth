@@ -1,7 +1,6 @@
 import unittest
 from ..user_management_sqlobject import UserManagement
 
-import tempfile
 import os
 
 
