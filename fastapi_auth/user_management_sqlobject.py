@@ -2,6 +2,7 @@
 
 from sqlobject import SQLObject, StringCol, DateTimeCol, sqlhub, connectionForURI
 from datetime import datetime
+from sqlobject.main import SQLObjectNotFound
 import bcrypt
 
 
@@ -39,7 +40,11 @@ class UserManagement:
         return list(User.select())
 
     def has_user(self, username: str):
-        return User.byUsername(username) is not None
+        try:
+            User.byUsername(username)
+            return True
+        except SQLObjectNotFound:
+            return False
 
     def change_password(self, username: str, new_password: str):
         user = User.byUsername(username)
@@ -56,5 +61,20 @@ class UserManagement:
 
 
 if __name__ == "__main__":
-    um = UserManagement("sqlite:///tmp/xxx.db")
-    um.add_user("admin", "admin", "admin,c")
+    um = UserManagement("sqlite:/:memory:")
+    print("Adding user 'admin'...")
+    um.add_user("admin", "password", "admin,user")
+    print("Checking if user 'admin' exists...")
+    print(um.has_user("admin"))  # Should print: True
+    print("Getting user 'admin'...")
+    print(um.get_user("admin", "password"))  # Should print: {'username': 'admin', 'roles': ['admin', 'user']}
+    print("Getting all users...")
+    print(um.get_users())  # Should print: [<User 1 username='admin' password='...' roles='admin,user' created='...'>]
+    print("Changing password for user 'admin'...")
+    um.change_password("admin", "new_password")
+    print("Verifying password for user 'admin'...")
+    print(um.verify_password("admin", "new_password"))  # Should print: True
+    print("Deleting user 'admin'...")
+    um.delete_user("admin")
+    print("Checking if user 'admin' exists...")
+    print(um.has_user("admin"))  # Should print: False
