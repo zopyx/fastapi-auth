@@ -1,10 +1,17 @@
 import unittest
 from ..user_management_sqlobject import UserManagement
 
+import tempfile
+import os
+
 
 class TestUserManagement(unittest.TestCase):
     def setUp(self):
-        self.um = UserManagement("sqlite/:memory:")
+        self.db_temp = "xx.db"
+        self.um = UserManagement(f"sqlite:///{self.db_temp}")
+
+    def tearDown(self):
+        os.unlink(self.db_temp)
 
     def test_add_user(self):
         self.um.add_user("admin", "password", "admin,user")
