@@ -20,6 +20,7 @@ dependencies = [
     "loguru",
     "bcrypt",
     "jinja2",
+    "sqlmodel", 
     "python-multipart",
     "typer",
     "typeguard",

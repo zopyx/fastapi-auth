@@ -17,18 +17,18 @@ class User(SQLModel, table=True):
 
 
 class UserManagement:
-    def __init__(self, db_uri):
+    def __init__(self, db_uri) -> None:
         self.engine = create_engine(db_uri)
         SQLModel.metadata.create_all(self.engine)
 
-    def add_user(self, username: str, password: str, roles: str):
+    def add_user(self, username: str, password: str, roles: str) -> None:
         hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
         user = User(username=username, password=hashed_password, roles=roles)
         with Session(self.engine) as session:
             session.add(user)
             session.commit()
 
-    def delete_user(self, username: str):
+    def delete_user(self, username: str) -> None:
         with Session(self.engine) as session:
             user = session.get(User, username)
             if user is None:
@@ -36,7 +36,7 @@ class UserManagement:
             session.delete(user)
             session.commit()
 
-    def get_user(self, username: str, password: str):
+    def get_user(self, username: str, password: str) -> dict:
         with Session(self.engine) as session:
             user = session.get(User, username)
             if user is None:
@@ -49,11 +49,11 @@ class UserManagement:
         with Session(self.engine) as session:
             return session.exec(select(User)).all()
 
-    def has_user(self, username: str):
+    def has_user(self, username: str) -> bool:
         with Session(self.engine) as session:
             return session.get(User, username) is not None
 
-    def change_password(self, username: str, new_password: str):
+    def change_password(self, username: str, new_password: str) -> None:
         with Session(self.engine) as session:
             user = session.get(User, username)
             if user is None:
@@ -63,7 +63,7 @@ class UserManagement:
             session.add(user)
             session.commit()
 
-    def verify_password(self, username: str, password: str):
+    def verify_password(self, username: str, password: str) -> str:
         with Session(self.engine) as session:
             user = session.get(User, username)
             if user is None:
