@@ -12,7 +12,9 @@ from .logger import LOG
 
 
 def get_user(request: Request) -> User:
-    """A dependency to get the dependencies."""
+    """This dependency return either an authenticated user depending on the
+    presented token or an anonymous user if no token is presented."""
+
     if "user" not in request.session:
         return ANONYMOUS_USER
     return User(**request.session["user"])

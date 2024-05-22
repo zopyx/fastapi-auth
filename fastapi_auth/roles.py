@@ -23,7 +23,7 @@ class RolesRegistry:
         self.roles = dict()
 
     @typechecked
-    def register(self, role: "Role") -> None:
+    def register(self, role: Role) -> None:
         """Register a role."""
         self.roles[role.name] = role
 
@@ -38,7 +38,7 @@ class RolesRegistry:
         return list(self.roles.keys())
 
     @typechecked
-    def get_role(self, role_name: str) -> "Role":
+    def get_role(self, role_name: str) -> Role:
         """Get a role by name."""
         try:
             return self.roles[role_name]
@@ -58,7 +58,7 @@ class RolesRegistry:
         raise ValueError(f"Role {role_name} not found in role registry")
 
     @typechecked
-    def as_dict(self) -> dict[str, "Role"]:
+    def as_dict(self) -> dict[str, Role]:
         """Return the roles as a dictionary."""
         return self.roles
 
