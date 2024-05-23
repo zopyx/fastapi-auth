@@ -160,6 +160,9 @@ is stored through a  signed cookie-based HTTP session. Session information is
 readable but not modifiable. The encryption key can be configured through an environment
 variable.
 
+## To do
+- a simple pluggable authentication system for integration of several user sources
+
 
 ## Author
 

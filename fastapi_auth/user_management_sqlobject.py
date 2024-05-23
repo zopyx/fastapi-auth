@@ -17,6 +17,8 @@ class User(SQLModel, table=True):
 
 
 class UserManagement:
+    """Class for managing users in a SQL database."""
+
     def __init__(self, db_uri) -> None:
         self.engine = create_engine(db_uri)
         SQLModel.metadata.create_all(self.engine)

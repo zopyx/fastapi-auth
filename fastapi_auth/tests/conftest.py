@@ -3,6 +3,7 @@ import pytest
 from sqlmodel import SQLModel, create_engine
 from ..user_management_sqlobject import UserManagement
 import uuid
+import os
 
 from ..demo_app import app
 
@@ -27,6 +28,8 @@ def user_management():
     um.add_user("admin", "admin", "Administrator")
     yield um
     UserManagement.__init__ = old_init
+    if os.path.exists(tmp_db):
+        os.unlink(tmp_db)
 
 
 @pytest.fixture(scope="module")
