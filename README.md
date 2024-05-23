@@ -1,4 +1,4 @@
-# fastapi-auth
+# zopyx-fastapi-auth
 
 An opionated authentication and authorization system for FastAPI.
 
