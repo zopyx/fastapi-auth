@@ -26,7 +26,6 @@ jobs:
         pip install uv
         uv venv
         uv pip install -e .
-        uv pip install pytest
         rehash
         #        python -m pip install --upgrade pip
         #        pip install -e .
@@ -34,4 +33,4 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Test with pytest
       run: |
-        pytest fastapi_auth
+        .venv/bin/pytest fastapi_auth
