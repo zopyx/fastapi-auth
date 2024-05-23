@@ -8,6 +8,7 @@ An opionated authentication and authorization system for FastAPI.
 - a commandline utility for adding, deleting users
 - roles and permissions
 - FastAPI endpoint protection based on permission or roles
+- fully tested, full test coverage, full mypy compliance, parameter checks at runtime
 
 
 ## Status
