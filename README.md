@@ -152,6 +152,24 @@ fastapi-auth-user-admin list-users
 fastapi-auth-user-admin set-password <username> <new-password> 
 ```
 
+## Environment variables
+
+### AUTH_DEFAULT_KEY
+
+`AUTH_DEFAULT_KEY` is used as encryption key for the user's session information.
+It is strongly recommended to set this value rather than depending on the
+default key as used in the code.
+
+### AUTH_DB_URI
+
+`AUTH_DB_URI` must be set to a SQL database. `zopyx-fastapi-auth` uses `sqlmodel` under the hood which uses `SQLAlchemy`and all supported databases (see https://docs.sqlalchemy.org/en/20/core/engines.html#database-urls). 
+
+Example for using a SQLite database `users.db` inside the current working directory:
+
+```
+export AUTH_DB_URI=sqlite:///users.db
+```
+
 ## Internals
 
 The implementation is based on top of the `starlette-session`
