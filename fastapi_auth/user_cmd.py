@@ -25,14 +25,6 @@ def get_user_management() -> UserManagement:
 def add(username: str, password: str, roles: str) -> None:
     """Add a user to the database."""
     um = get_user_management()
-    #    um.create_db()
-
-    roles_lst = roles.split(",")
-    #    allowed_roles = ROLES_REGISTRY.all_role_names()
-    #    if not all(role in allowed_roles for role in roles_lst):
-    #        msg = f"Invalid roles: {roles}"
-    #        raise ValueError(msg)
-
     um.add_user(username, password, roles)
     LOG.debug(f"Added user {username} with roles {roles}")
 
