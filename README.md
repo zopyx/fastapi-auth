@@ -179,6 +179,48 @@ is stored through a  signed cookie-based HTTP session. Session information is
 readable but not modifiable. The encryption key can be configured through an environment
 variable.
 
+## Getting started with the include mini demo application
+
+### Installation
+
+Checkout the codebase and install it using pip or uv:
+
+```
+python3.12 -m venv .venv
+source .venv/bin/activate
+pip3 install -e .
+```
+
+or
+```
+uv venv -p python3.12
+source .venv/bin/activate
+uv pip install -e .
+```
+
+### Create a demo user
+
+```
+fastapi-auth-user-admin add admin admin Administrator
+```
+This will create a user `admin` with password `admin`.
+
+### Running the demo service
+
+```
+uvicorn fastapi_auth.demo_app:app
+```
+
+### Login into the demo application
+
+Visit http://localhost:8000/auth/login and login as `admin`/`admin`.
+
+![Login into application](/images/login.png)
+
+### After successfull login
+
+![Login into application](/images/logged-in.png)
+
 ## To do
 - a simple pluggable authentication system for integration of several user sources
 
