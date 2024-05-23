@@ -35,9 +35,9 @@ async def login(
     error_message: Optional[str] = None,
 ):
     return templates.TemplateResponse(
+        request,
         "login.html",
         {
-            "request": request,
             "user": user,
             "message": message,
             "error_message": error_message,
@@ -91,10 +91,10 @@ async def login_post(
         message = f"You {username} could not be logged in. Please try again."
         LOG.error(message)
         return templates.TemplateResponse(
+            request,
             "login.html",
             {
                 "user": ANONYMOUS_USER,
-                "request": request,
                 "error_message": message,
             },
         )

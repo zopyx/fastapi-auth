@@ -77,8 +77,9 @@ def read_root(
     error_message: Optional[str] = None,
 ):
     return templates.TemplateResponse(
+        request,
         "demo.html",
-        {"request": request, "user": user, "message": message, "error_message": error_message},
+        {"request": request, "user": user, "message": message, "error_message": error_message, },
     )
 
 
