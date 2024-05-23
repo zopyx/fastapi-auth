@@ -16,6 +16,7 @@ class TestUserManagement(unittest.TestCase):
     def test_add_user(self):
         self.um.add_user("admin", "password", "admin,user")
         self.assertTrue(self.um.has_user("admin"))
+
     def test_add_user_twice(self):
         self.um.add_user("admin", "password", "admin,user")
         with pytest.raises(ValueError):
