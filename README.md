@@ -123,10 +123,11 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 ## User management
 
-For now, `fastapi-auth` stores user accounts inside a Sqlite database. There is
+For now, `fastapi-auth` stores user accounts inside a SQL database. There is
 the `fastapi-auth-user-admin` utility for managing user accounts through the
 commandline.  There is no support (and there will be no support) for managing
-user accounts through a web admin interface.
+user accounts through a web admin interface. The database connection can be configured
+using the `AUTH_DB_URI` environment variable.
 
 ### adding user
 
