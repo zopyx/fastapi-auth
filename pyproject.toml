@@ -1,13 +1,14 @@
 [project]
 name = "zopyx-fastapi-auth"
 description = "FastAPI authentication and authorization"
-version = "0.2.0"
+version = "0.2.1"
 readme = "README.md"
 authors = [
     { name = "Andreas Jung", email = "info@zopyx.com" }
 ]
 classifiers = [
-  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.09",
+  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
@@ -32,8 +33,13 @@ dependencies = [
 dev = [
     "tox",
     "pytest",
-    "ruff"
+    "ruff",
+    "twine", 
+    "build",
 ]
+
+[project.urls]
+homepage = https://github.com/zopyx/fastapi-auth
 
 [tool.setuptools]
 packages = ["fastapi_auth"]
