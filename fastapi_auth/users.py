@@ -10,10 +10,15 @@ from typeguard import typechecked
 class User(BaseModel):
     """Users"""
 
+    # Name of user
     name: str = Field(..., description="Name of the user")
+    # Description of user
     description: str = Field(..., description="Description of the user")
+    # Is user anonymous
     is_anonymous: bool = True
+    # Roles of user
     roles: list[Role] = []
+    # Properties of user
     properties: dict = {}
 
     def __str__(self) -> str:
