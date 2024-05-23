@@ -79,7 +79,12 @@ def read_root(
     return templates.TemplateResponse(
         request,
         "demo.html",
-        {"request": request, "user": user, "message": message, "error_message": error_message, },
+        {
+            "request": request,
+            "user": user,
+            "message": message,
+            "error_message": error_message,
+        },
     )
 
 

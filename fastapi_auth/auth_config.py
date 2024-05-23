@@ -3,12 +3,12 @@ from pydantic import SecretStr
 import os
 
 DEFAULT_KEY = "secret_key"
-DEFAULT_DB = os.path.abspath(os.path.join(os.getcwd(), "user_management.db"))
+DEFAULT_DB_URI = "sqlite:///user_management.db"
 
 
 class AuthConfig(BaseSettings):
     secret_key: SecretStr = DEFAULT_KEY
-    db_name: str = DEFAULT_DB
+    db_uri: str = DEFAULT_DB_URI
 
     class Config:
         env_prefix = "AUTH_"

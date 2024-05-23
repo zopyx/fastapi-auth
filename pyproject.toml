@@ -21,6 +21,7 @@ dependencies = [
     "bcrypt",
     "jinja2",
     "sqlmodel", 
+    "rich",
     "python-multipart",
     "typer",
     "typeguard",

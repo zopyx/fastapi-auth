@@ -8,7 +8,7 @@ from datetime import timedelta
 from .dependencies import get_user
 from .logger import LOG
 from .users import User, ANONYMOUS_USER
-from .user_management import UserManagement
+from .user_management_sqlobject import UserManagement
 from .jinja2_templates import templates
 from .roles import ROLES_REGISTRY
 from datetime import datetime, timezone
@@ -62,7 +62,7 @@ async def login_post(
     password: str = Form(...),
     user: User = Depends(get_user),
 ):
-    um = UserManagement(AUTH_SETTINGS.db_name)
+    um = UserManagement(AUTH_SETTINGS.db_uri)
     user_data = um.get_user(username, password)
 
     if user_data is not None:

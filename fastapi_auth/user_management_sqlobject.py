@@ -3,6 +3,8 @@
 from sqlmodel import SQLModel, Field, Session, create_engine, select
 from datetime import datetime, timezone
 import bcrypt
+from rich.table import Table
+from rich.console import Console
 
 
 def utc_now():
@@ -22,6 +24,8 @@ class UserManagement:
         SQLModel.metadata.create_all(self.engine)
 
     def add_user(self, username: str, password: str, roles: str) -> None:
+        if self.has_user(username):
+            raise ValueError(f"User {username} already exists.")
         hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
         user = User(username=username, password=hashed_password, roles=roles)
         with Session(self.engine) as session:
