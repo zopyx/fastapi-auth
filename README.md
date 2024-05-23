@@ -4,7 +4,7 @@ An opionated authentication and authorization system for FastAPI.
 
 ## Features
 
-- a SQLite-based user database (to be rewritten using SQLObject for broader database support)
+- a RDBMS-based user database (support for almost all databases through sqlmodel)
 - a commandline utility for adding, deleting users
 - roles and permissions
 - FastAPI endpoint protection based on permission or roles
