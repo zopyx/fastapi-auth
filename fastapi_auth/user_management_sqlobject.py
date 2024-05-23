@@ -4,12 +4,17 @@ from sqlmodel import SQLModel, Field, Session, create_engine, select
 from datetime import datetime, timezone
 from fastapi import Request
 import bcrypt
-from datetime import datetime, timedelta
+from datetime import timedelta
+from typeguard import typechecked
 
 from .auth_config import AUTH_SETTINGS
 from .roles import ROLES_REGISTRY
 
+# AuthUser is an alias in order to avoid name clash with the SQLModel User class below
+from .users import User as AuthUser
+
 LIFE_TIME = 3600 * 24
+
 
 def utc_now():
     return datetime.now(timezone.utc)
@@ -25,10 +30,12 @@ class User(SQLModel, table=True):
 class UserManagement:
     """Class for managing users in a SQL database."""
 
-    def __init__(self, db_uri) -> None:
+    @typechecked
+    def __init__(self, db_uri: str) -> None:
         self.engine = create_engine(db_uri)
         SQLModel.metadata.create_all(self.engine)
 
+    @typechecked
     def add_user(self, username: str, password: str, roles: str) -> None:
         if self.has_user(username):
             raise ValueError(f"User {username} already exists.")
@@ -38,6 +45,7 @@ class UserManagement:
             session.add(user)
             session.commit()
 
+    @typechecked
     def delete_user(self, username: str) -> None:
         with Session(self.engine) as session:
             user = session.get(User, username)
@@ -46,7 +54,8 @@ class UserManagement:
             session.delete(user)
             session.commit()
 
-    def get_user(self, username: str, password: str) -> dict:
+    @typechecked
+    def get_user(self, username: str, password: str) -> dict | None:
         with Session(self.engine) as session:
             user = session.get(User, username)
             if user is None:
@@ -59,10 +68,12 @@ class UserManagement:
         with Session(self.engine) as session:
             return session.exec(select(User)).all()
 
+    @typechecked
     def has_user(self, username: str) -> bool:
         with Session(self.engine) as session:
             return session.get(User, username) is not None
 
+    @typechecked
     def change_password(self, username: str, new_password: str) -> None:
         with Session(self.engine) as session:
             user = session.get(User, username)
@@ -73,7 +84,8 @@ class UserManagement:
             session.add(user)
             session.commit()
 
-    def verify_password(self, username: str, password: str) -> str:
+    @typechecked
+    def verify_password(self, username: str, password: str) -> bool:
         with Session(self.engine) as session:
             user = session.get(User, username)
             if user is None:
@@ -81,7 +93,8 @@ class UserManagement:
             return bcrypt.checkpw(password.encode(), user.password.encode())
 
 
-async def get_user_from_fastapi_request(request) -> User:
+@typechecked
+async def get_user_from_fastapi_request(request: Request) -> AuthUser | None:
     """Get the user from a FastAPI request."""
 
     form = await request.form()
@@ -90,7 +103,7 @@ async def get_user_from_fastapi_request(request) -> User:
 
     um = UserManagement(AUTH_SETTINGS.db_uri)
     user_data = um.get_user(username, password)
-    if not user_data:
+    if user_data is None:
         return None
 
     roles = user_data["roles"]
@@ -98,7 +111,7 @@ async def get_user_from_fastapi_request(request) -> User:
 
     now = datetime.now(timezone.utc)
     expires = now + timedelta(seconds=LIFE_TIME)
-    user = User(
+    user = AuthUser(
         name=user_data["username"],
         description=user_data["username"],
         is_anonymous=False,

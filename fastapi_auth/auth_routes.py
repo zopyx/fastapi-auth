@@ -3,15 +3,12 @@ from typing import Optional
 from fastapi import Depends, Form, Request, APIRouter
 from fastapi.responses import HTMLResponse, RedirectResponse
 from starlette import status
-from datetime import timedelta
 
 from .dependencies import get_user
 from .logger import LOG
 from .users import User, ANONYMOUS_USER
-from .user_management_sqlobject import UserManagement, get_user_from_fastapi_request
+from .user_management_sqlobject import get_user_from_fastapi_request
 from .jinja2_templates import templates
-from .roles import ROLES_REGISTRY
-from datetime import datetime, timezone
 
 from starlette.middleware.sessions import SessionMiddleware
 
@@ -61,18 +58,16 @@ async def login_post(
     username: str = Form(...),
     password: str = Form(...),
 ):
-    um = UserManagement(AUTH_SETTINGS.db_uri)
-
-    user = await get_user_from_fastapi_request(request)  
+    user = await get_user_from_fastapi_request(request)
 
     if user:
         request.session["user"] = user.model_dump(exclude=["created"])
-        message = f"Welcome {user.username}. You are now logged in."
-        LOG.info(f"User {user.username} logged in")
+        message = f"Welcome {user.name}. You are now logged in."
+        LOG.info(f"User {user.name} logged in")
         return RedirectResponse(f"/?message={message}", status_code=status.HTTP_302_FOUND)
 
     else:
-        message = f"You could not be logged in. Please try again."
+        message = "You could not be logged in. Please try again."
         LOG.error(message)
         return templates.TemplateResponse(
             request,
