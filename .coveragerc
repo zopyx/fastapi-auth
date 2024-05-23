@@ -1,0 +1,2 @@
+[run]
+omit = fastapi_auth/user_cmd.py
