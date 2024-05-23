@@ -71,17 +71,3 @@ class UserManagement:
             if user is None:
                 raise ValueError(f"User {username} does not exist.")
             return bcrypt.checkpw(password.encode(), user.password.encode())
-
-
-if __name__ == "__main__":
-    um = UserManagement("sqlite:///xx.db")
-    print("Adding user 'admin'...")
-    um.add_user("admin", "password", "admin,user")
-    print("Checking if user 'admin' exists...")
-    print(um.has_user("admin"))  # Should print: True
-    print("Getting user 'admin'...")
-    print(um.get_user("admin", "password"))  # Should print: {'username': 'admin', 'roles': ['admin', 'user']}
-    print("Getting all users...")
-    print(um.get_users())  # Should print: [<User 1 username='admin' password='...' roles='admin,user' created='...'>]
-    print("Changing password for user 'admin'...")
-    um.change_password("admin", "new_password")
