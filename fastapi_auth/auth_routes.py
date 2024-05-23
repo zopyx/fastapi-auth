@@ -8,7 +8,7 @@ from datetime import timedelta
 from .dependencies import get_user
 from .logger import LOG
 from .users import User, ANONYMOUS_USER
-from .user_management_sqlobject import UserManagement
+from .user_management_sqlobject import UserManagement, get_user_from_fastapi_request
 from .jinja2_templates import templates
 from .roles import ROLES_REGISTRY
 from datetime import datetime, timezone
@@ -60,35 +60,19 @@ async def login_post(
     request: Request,
     username: str = Form(...),
     password: str = Form(...),
-    user: User = Depends(get_user),
 ):
     um = UserManagement(AUTH_SETTINGS.db_uri)
-    user_data = um.get_user(username, password)
 
-    if user_data is not None:
-        roles = user_data["roles"]
-        roles = [ROLES_REGISTRY.get_role(r) for r in roles if ROLES_REGISTRY.has_role(r)]
+    user = await get_user_from_fastapi_request(request)  
 
-        now = datetime.now(timezone.utc)
-        expires = now + timedelta(seconds=LIFE_TIME)
-        user = User(
-            name=user_data["username"],
-            description=user_data["username"],
-            is_anonymous=False,
-            roles=roles,
-            properties=dict(
-                source="internal",
-                logged_in=now.isoformat(),
-                expires=expires.isoformat(),
-            ),
-        )
-        request.session["user"] = user.model_dump()
-        message = f"Welcome {user_data['username']}. You are now logged in."
-        LOG.info(f"User {user_data['username']} logged in")
+    if user:
+        request.session["user"] = user.model_dump(exclude=["created"])
+        message = f"Welcome {user.username}. You are now logged in."
+        LOG.info(f"User {user.username} logged in")
         return RedirectResponse(f"/?message={message}", status_code=status.HTTP_302_FOUND)
 
     else:
-        message = f"You {username} could not be logged in. Please try again."
+        message = f"You could not be logged in. Please try again."
         LOG.error(message)
         return templates.TemplateResponse(
             request,

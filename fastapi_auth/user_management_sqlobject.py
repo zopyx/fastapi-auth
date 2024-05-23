@@ -2,8 +2,14 @@
 
 from sqlmodel import SQLModel, Field, Session, create_engine, select
 from datetime import datetime, timezone
+from fastapi import Request
 import bcrypt
+from datetime import datetime, timedelta
 
+from .auth_config import AUTH_SETTINGS
+from .roles import ROLES_REGISTRY
+
+LIFE_TIME = 3600 * 24
 
 def utc_now():
     return datetime.now(timezone.utc)
@@ -73,3 +79,34 @@ class UserManagement:
             if user is None:
                 raise ValueError(f"User {username} does not exist.")
             return bcrypt.checkpw(password.encode(), user.password.encode())
+
+
+async def get_user_from_fastapi_request(request) -> User:
+    """Get the user from a FastAPI request."""
+
+    form = await request.form()
+    username = form["username"]
+    password = form["password"]
+
+    um = UserManagement(AUTH_SETTINGS.db_uri)
+    user_data = um.get_user(username, password)
+    if not user_data:
+        return None
+
+    roles = user_data["roles"]
+    roles = [ROLES_REGISTRY.get_role(r) for r in roles if ROLES_REGISTRY.has_role(r)]
+
+    now = datetime.now(timezone.utc)
+    expires = now + timedelta(seconds=LIFE_TIME)
+    user = User(
+        name=user_data["username"],
+        description=user_data["username"],
+        is_anonymous=False,
+        roles=roles,
+        properties=dict(
+            source="internal",
+            logged_in=now.isoformat(),
+            expires=expires.isoformat(),
+        ),
+    )
+    return user
