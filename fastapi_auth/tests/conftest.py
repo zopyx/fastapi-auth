@@ -1,8 +1,7 @@
 from fastapi.testclient import TestClient
 import pytest
-from sqlmodel import SQLModel, Field, Session, create_engine, select
+from sqlmodel import SQLModel, create_engine
 from ..user_management_sqlobject import UserManagement
-import tempfile
 import uuid
 
 from ..demo_app import app

@@ -3,8 +3,6 @@
 from sqlmodel import SQLModel, Field, Session, create_engine, select
 from datetime import datetime, timezone
 import bcrypt
-from rich.table import Table
-from rich.console import Console
 
 
 def utc_now():
