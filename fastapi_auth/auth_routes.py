@@ -61,7 +61,7 @@ async def login_post(
     user = await get_user_from_fastapi_request(request)
 
     if user:
-        request.session["user"] = user.model_dump(exclude=["created"])
+        request.session["user"] = user.model_dump(exclude={"created"})
         message = f"Welcome {user.name}. You are now logged in."
         LOG.info(f"User {user.name} logged in")
         return RedirectResponse(f"/?message={message}", status_code=status.HTTP_302_FOUND)

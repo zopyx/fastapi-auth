@@ -69,20 +69,3 @@ def list_users() -> None:
     for user in users:
         table.add_row(user.username, user.roles, user.created.isoformat())
     console.print(table)
-
-
-@app.command()
-def delete_db() -> None:
-    """Delete the database."""
-    um = get_user_management()
-    um.delete_db()
-    LOG.debug("Deleted the database.")
-
-
-def main() -> None:
-    """Run the application."""
-    app()
-
-
-if __name__ == "__main__":
-    app()

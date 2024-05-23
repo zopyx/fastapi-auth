@@ -1,7 +1,7 @@
 from pydantic_settings import BaseSettings
 from pydantic import SecretStr
 
-DEFAULT_KEY = "secret_key"
+DEFAULT_KEY = SecretStr("secret_key")
 DEFAULT_DB_URI = "sqlite:///user_management.db"
 
 

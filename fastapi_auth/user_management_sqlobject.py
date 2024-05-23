@@ -1,10 +1,10 @@
 """Module for managing users in a SQLite database."""
 
-from sqlmodel import SQLModel, Field, Session, create_engine, select
-from datetime import datetime, timezone
-from fastapi import Request
+from datetime import datetime, timedelta, timezone
+
 import bcrypt
-from datetime import timedelta
+from fastapi import Request
+from sqlmodel import Field, Session, SQLModel, create_engine, select
 from typeguard import typechecked
 
 from .auth_config import AUTH_SETTINGS
@@ -98,8 +98,8 @@ async def get_user_from_fastapi_request(request: Request) -> AuthUser | None:
     """Get the user from a FastAPI request."""
 
     form = await request.form()
-    username = form["username"]
-    password = form["password"]
+    username = str(form["username"])
+    password = str(form["password"])
 
     um = UserManagement(AUTH_SETTINGS.db_uri)
     user_data = um.get_user(username, password)
