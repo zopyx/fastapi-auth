@@ -27,6 +27,14 @@ dependencies = [
     "typeguard",
 ]
 
+
+[project.optional-dependencies]
+dev = [
+    "tox",
+    "pytest",
+    "ruff"
+]
+
 [tool.setuptools]
 packages = ["fastapi_auth"]
 
