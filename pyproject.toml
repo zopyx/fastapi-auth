@@ -7,8 +7,9 @@ authors = [
     { name = "Andreas Jung", email = "info@zopyx.com" }
 ]
 classifiers = [
-  "Programming Language :: Python :: 3.09",
+  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
@@ -39,7 +40,7 @@ dev = [
 ]
 
 [project.urls]
-homepage = https://github.com/zopyx/fastapi-auth
+homepage = "https://github.com/zopyx/fastapi-auth"
 
 [tool.setuptools]
 packages = ["fastapi_auth"]
