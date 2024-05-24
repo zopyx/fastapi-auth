@@ -7,7 +7,7 @@ from starlette import status
 from .dependencies import get_user
 from .logger import LOG
 from .users import User, ANONYMOUS_USER
-from .user_management_sqlobject import get_user_from_fastapi_request
+from .user_management_sqlobject import get_user_from_fastapi_request, authenticate_user_for_fastapi
 from .jinja2_templates import templates
 
 from starlette.middleware.sessions import SessionMiddleware
@@ -61,7 +61,7 @@ async def login_post(
     user = await get_user_from_fastapi_request(request)
 
     if user:
-        request.session["user"] = user.model_dump(exclude={"created"})
+        authenticate_user_for_fastapi(user=user, request=request)
         message = f"Welcome {user.name}. You are now logged in."
         LOG.info(f"User {user.name} logged in")
         return RedirectResponse(f"/?message={message}", status_code=status.HTTP_302_FOUND)

@@ -123,3 +123,9 @@ async def get_user_from_fastapi_request(request: Request) -> AuthUser | None:
         ),
     )
     return user
+
+
+@typechecked
+def authenticate_user_for_fastapi(user: AuthUser, request: Request) -> None:
+    """Authenticate the user for a FastAPI request by assigning the user to the session."""
+    request.session["user"] = user.model_dump(exclude={"created"})
