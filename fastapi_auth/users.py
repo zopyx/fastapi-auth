@@ -32,6 +32,14 @@ class User(BaseModel):
         return role in self.roles
 
     @typechecked
+    def has_role_by_name(self, role_name: str) -> bool:
+        """Check if the user has the required role (by name)."""
+        for role in self.roles:
+            if role.name == role_name:
+                return True
+        return False
+
+    @typechecked
     def has_permission(self, permission: Permission) -> bool:
         """Check if the user has the required permission."""
         for role in self.roles:

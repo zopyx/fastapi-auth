@@ -34,3 +34,6 @@ def test_has_role():
     user = User(name="John Doe", description="Test user", roles=[role])
     assert user.has_role(role) == True
     assert user.has_role(Role(name="user", description="User role")) == False
+
+    assert user.has_role_by_name("admin") == True
+    assert user.has_role_by_name("user") == False
