@@ -9,6 +9,7 @@ from typeguard import typechecked
 
 from .auth_config import AUTH_SETTINGS
 from .roles import ROLES_REGISTRY
+from .logger import LOG
 
 # AuthUser is an alias in order to avoid name clash with the SQLModel User class below
 from .users import User as AuthUser
@@ -32,6 +33,7 @@ class UserManagement:
 
     @typechecked
     def __init__(self, db_uri: str) -> None:
+        LOG.info(f"Connecting to database {db_uri}")
         self.engine = create_engine(db_uri)
         SQLModel.metadata.create_all(self.engine)
 

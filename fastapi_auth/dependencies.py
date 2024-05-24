@@ -10,6 +10,9 @@ from .roles import Role
 from .permissions import Permission
 from .logger import LOG
 
+class Unauthorized(Exception):
+    """ """
+
 
 def get_user(request: Request) -> User:
     """This dependency return either an authenticated user depending on the
