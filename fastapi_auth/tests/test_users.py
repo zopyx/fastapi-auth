@@ -2,6 +2,7 @@ import pytest
 from pydantic import ValidationError
 from ..users import User
 from ..roles import Role
+from ..permissions import Permission
 
 
 def test_user_creation():
@@ -37,3 +38,14 @@ def test_has_role():
 
     assert user.has_role_by_name("admin") == True
     assert user.has_role_by_name("user") == False
+
+
+def test_role_names():
+    perm1 = Permission(name="read", description="Read permission")
+    perm2 = Permission(name="write", description="Write permission")
+    roles = [Role(name="admin", description="Admin role", permissions=[perm1]), Role(name="user", description="User role", permissions=[perm2])]
+    user = User(name="John Doe", description="Test user", roles=roles)
+    assert user.role_names() == ["admin", "user"]
+    assert list(user.all_permission_names()) == (["read", "write"])
+
+

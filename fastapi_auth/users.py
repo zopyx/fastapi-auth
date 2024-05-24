@@ -38,6 +38,22 @@ class User(BaseModel):
             if role.name == role_name:
                 return True
         return False
+    
+    def role_names(self) -> list[str]:
+        """Return a list of role names."""
+        return [role.name for role in self.roles]
+    
+    def all_permissions(self) -> list[Permission]:
+        """Return a list of all permissions."""
+        permissions = []
+        for role in self.roles:
+            permissions.extend(role.permissions)
+        return permissions
+                    
+    def all_permission_names(self) -> list[str]:
+        """Return a list of all permission names."""
+        permissions = self.all_permissions()
+        return [permission.name for permission in permissions]
 
     @typechecked
     def has_permission(self, permission: Permission) -> bool:
