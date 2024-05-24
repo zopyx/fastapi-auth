@@ -69,3 +69,12 @@ def list_users() -> None:
     for user in users:
         table.add_row(user.username, user.roles, user.created.isoformat())
     console.print(table)
+
+
+def main() -> None:
+    """Run the application."""
+    app()
+
+
+if __name__ == "__main__":
+    app()
