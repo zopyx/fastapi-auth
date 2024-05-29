@@ -12,12 +12,16 @@ class User(BaseModel):
 
     # Name of user
     name: str = Field(..., description="Name of the user")
+
     # Description of user
     description: str = Field(..., description="Description of the user")
+
     # Is user anonymous
     is_anonymous: bool = True
+
     # Roles of user
     roles: list[Role] = []
+
     # Properties of user
     properties: dict = {}
 
@@ -38,18 +42,18 @@ class User(BaseModel):
             if role.name == role_name:
                 return True
         return False
-    
+
     def role_names(self) -> list[str]:
         """Return a list of role names."""
         return [role.name for role in self.roles]
-    
+
     def all_permissions(self) -> list[Permission]:
         """Return a list of all permissions."""
         permissions = []
         for role in self.roles:
             permissions.extend(role.permissions)
         return permissions
-                    
+
     def all_permission_names(self) -> list[str]:
         """Return a list of all permission names."""
         permissions = self.all_permissions()

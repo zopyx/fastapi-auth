@@ -10,6 +10,7 @@ from .roles import Role
 from .permissions import Permission
 from .logger import LOG
 
+
 class Unauthorized(Exception):
     """ """
 
@@ -25,7 +26,7 @@ def get_user(request: Request) -> User:
 
 class Protected:
     """A dependency to protect routes.  The user must have the required
-    permission or role to access the route.  Using a permission and role(s) are
+    permission or a role to access the route.  Using a permission and role(s) are
     mutually exclusive. You must specify either a permission or a list of roles.
     This dependency should be used for authenticated routes only. only.  The
     authenticated user must either have a specified role or one of its role must
@@ -55,7 +56,7 @@ class Protected:
         self,
         user: User = Depends(get_user),
     ) -> User:
-        # If the user is anonymous, return the anonymous user
+        # check for roles
         for rr in self.required_roles:
             for user_role in user.roles:
                 if user_role == rr:

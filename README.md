@@ -229,4 +229,3 @@ Visit http://localhost:8000/auth/login and login as `admin`/`admin`.
 ## Author
 
 Andreas Jung <info@zopyx.com>
-
