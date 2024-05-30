@@ -9,6 +9,7 @@ An opionated authentication and authorization system for FastAPI.
 - roles and permissions
 - FastAPI endpoint protection based on permission or roles
 - fully tested, full test coverage, full mypy compliance, parameter checks at runtime
+- a plugin system for arbitrary authentication/authorization (requires one class and one method to implement)
 
 
 ## Status
@@ -225,16 +226,22 @@ Visit http://localhost:8000/auth/login and login as `admin`/`admin`.
 
 ## Pluggable authenticators
 
-This module supports a simple architecture to use multiple authenticator/authorization backends inside 
-your FastAPI application. As an example, the authentication system can be configured for using the default
-RDBMS-based user management with an additional plugin for LDAP.
+This module provides a flexible architecture that allows the use of multiple
+authentication and authorization backends within your FastAPI application. For
+instance, you can configure the authentication system to use the default
+Relational Database Management System (RDBMS)-based user management,
+supplemented with an additional plugin for Lightweight Directory Access Protocol
+(LDAP).
 
 ### Example
 
-An `Authenticator` must provide an `authenticate(request: Request)` method that the related 
-login parameters from a login request and returns a `Users` object. Authenticators must be registered
-with the `AUTHENTICATOR_REGISTRY`. The order of their execution is determined by their `position` parameter.
-`position=0` means that this `Authenticator` is used first, higher position means lower priority.
+An `Authenticator` is required to implement an `authenticate(request: Request)`
+method. This method should extract the login parameters from a login request and
+return a `Users` object. Authenticators need to be registered with the
+`AUTHENTICATOR_REGISTRY`. The execution order of the Authenticators is
+determined by their `position` parameter. A `position` of `0` indicates that the
+Authenticator is the first to be used. A higher `position` value signifies a
+lower priority.
 
 ```
 from fastapi import Request
