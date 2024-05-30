@@ -28,7 +28,6 @@ class User(SQLModel, table=True):
     created: datetime = Field(default_factory=utc_now)
 
 
-
 class UserManagement:
     """Class for managing users in a SQL database."""
 
