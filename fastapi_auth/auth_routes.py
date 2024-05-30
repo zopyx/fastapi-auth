@@ -62,7 +62,11 @@ async def login_post(
 ):
     for authenticator in AUTHENTICATOR_REGISTRY.authenticators:
         LOG.debug(f"Trying to authenticate with {authenticator.name}")
-        user = await authenticator.authenticate(request)
+        try:
+            user = await authenticator.authenticate(request)
+        except Exception as e:
+            LOG.error(f"Error authenticating with {authenticator.name}: {e}")
+            user = None
         if user:
             break
 
