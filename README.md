@@ -233,7 +233,7 @@ RDBMS-based user management with an additional plugin for LDAP.
 
 An `Authenticator` must provide an `authenticate(request: Request)` method that the related 
 login parameters from a login request and returns a `Users` object. Authenticators must be registered
-with the `AUTHENTICATORS_REGISTRY`. The order of their execution is determined by their `position` parameter.
+with the `AUTHENTICATOR_REGISTRY`. The order of their execution is determined by their `position` parameter.
 `position=0` means that this `Authenticator` is used first, higher position means lower priority.
 
 ```
@@ -248,8 +248,10 @@ class MyAuthenticator(Authenticator):
         # extract credentials from request
         username = request.form....
         password = request.form....
+
         # perform authentication against your own authentication system
         user_data = my_backend.authenticate_user(username, password)
+        
         return User(name=user_data["name"], roles=[...])
 
 AUTHENTICATOR_REGISTRY.add_authenticator(MyAuthenticator(), 0)
