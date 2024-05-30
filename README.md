@@ -222,9 +222,38 @@ Visit http://localhost:8000/auth/login and login as `admin`/`admin`.
 
 ![Login into application](/images/logged-in.png)
 
-## To do
-- a simple pluggable authentication system for integration of several user sources
 
+## Pluggable authenticators
+
+This module supports a simple architecture to use multiple authenticator/authorization backends inside 
+your FastAPI application. As an example, the authentication system can be configured for using the default
+RDBMS-based user management with an additional plugin for LDAP.
+
+### Example
+
+An `Authenticator` must provide an `authenticate(request: Request)` method that the related 
+login parameters from a login request and returns a `Users` object. Authenticators must be registered
+with the `AUTHENTICATORS_REGISTRY`. The order of their execution is determined by their `position` parameter.
+`position=0` means that this `Authenticator` is used first, higher position means lower priority.
+
+```
+from fastapi import Request
+from fastapi.authenticator_registry import Authenticator, AUTHENTICATOR_REGISTRY
+from fastapi.users import User 
+
+class MyAuthenticator(Authenticator):
+
+    async def authenticate(request: Request) -> User:
+
+        # extract credentials from request
+        username = request.form....
+        password = request.form....
+        # perform authentication against your own authentication system
+        user_data = my_backend.authenticate_user(username, password)
+        return User(name=user_data["name"], roles=[...])
+
+AUTHENTICATOR_REGISTRY.add_authenticator(MyAuthenticator(), 0)
+```
 
 ## Author
 
