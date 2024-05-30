@@ -14,6 +14,8 @@ from starlette.middleware.sessions import SessionMiddleware
 
 from .auth_config import AUTH_SETTINGS
 
+from .authenticator_registry import AUTHENTICATOR_REGISTRY
+
 LIFE_TIME = 3600 * 24
 
 
@@ -58,7 +60,11 @@ async def login_post(
     username: str = Form(...),
     password: str = Form(...),
 ):
-    user = await get_user_from_fastapi_request(request)
+    for authenticator in AUTHENTICATOR_REGISTRY.authenticators:
+        LOG.debug(f"Trying to authenticate with {authenticator.name}")
+        user = await authenticator.authenticate(request)
+        if user:
+            break
 
     if user:
         authenticate_user_for_fastapi(user=user, request=request)

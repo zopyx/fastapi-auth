@@ -12,9 +12,9 @@ class Authenticator(ABC):
     name: str = "Authenticator"
 
     @abstractmethod
-    def authenticate(self, request: Request) -> User | None:
+    async def authenticate(self, request: Request) -> User | None:
         """Authenticate the user."""
-        raise NotImplementedError()
+        raise NotImplementedError()  # pragma: no cover
 
 
 class AuthenticatorRegistry:
@@ -27,3 +27,6 @@ class AuthenticatorRegistry:
     def add_authenticator(self, authenticator: Authenticator, position: int) -> None:
         """Add an authenticator to the registry."""
         self.authenticators.insert(position, authenticator)
+
+
+AUTHENTICATOR_REGISTRY = AuthenticatorRegistry()

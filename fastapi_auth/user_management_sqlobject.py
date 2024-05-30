@@ -6,7 +6,7 @@ import bcrypt
 from fastapi import Request
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 from typeguard import typechecked
-
+from .authenticator_registry import Authenticator
 from .auth_config import AUTH_SETTINGS
 from .roles import ROLES_REGISTRY
 from .logger import LOG
@@ -131,3 +131,13 @@ async def get_user_from_fastapi_request(request: Request) -> AuthUser | None:
 def authenticate_user_for_fastapi(user: AuthUser, request: Request) -> None:
     """Authenticate the user for a FastAPI request by assigning the user to the session."""
     request.session["user"] = user.model_dump(exclude={"created"})
+
+
+class DefaultAuthenticator(Authenticator):
+    """Default authenticator for user management."""
+
+    name = "DefaultAuthenticator"
+
+    @typechecked
+    async def authenticate(self, request: Request) -> AuthUser | None:
+        return await get_user_from_fastapi_request(request)

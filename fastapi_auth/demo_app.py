@@ -13,6 +13,11 @@ from .jinja2_templates import templates
 from .roles import ROLES_REGISTRY, Role
 from .permissions import Permission
 from .dependencies import Protected
+from .authenticator_registry import AUTHENTICATOR_REGISTRY
+from .user_management_sqlobject import DefaultAuthenticator
+
+
+AUTHENTICATOR_REGISTRY.add_authenticator(authenticator=DefaultAuthenticator(), position=0)
 
 # Your FastAPI app
 app = FastAPI()

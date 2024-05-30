@@ -1,3 +1,5 @@
+import pytest
+
 from ..authenticator_registry import Authenticator, AuthenticatorRegistry
 
 
@@ -38,3 +40,8 @@ def test_authenticator_registry_with_multiple_authenticators():
     assert registry.authenticators[1].name == "TestAuthenticator2"
     assert registry.authenticators[0].authenticate(None) is None
     assert registry.authenticators[1].authenticate(None) is None
+
+
+def test_authenticator_invoked_directly():
+    with pytest.raises(TypeError):
+        Authenticator()
