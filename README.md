@@ -264,6 +264,16 @@ class MyAuthenticator(Authenticator):
 AUTHENTICATOR_REGISTRY.add_authenticator(MyAuthenticator(), 0)
 ```
 
+## Provided routes
+
+The `demo_app.py` application demonstrates the integration of `/auth/login` and
+`/auth/logout` routes. You can find the implementation of these routes in
+`auth_routes.py`. This code is customizable, allowing you to adapt it to your
+specific requirements, as it includes some pre-configured decisions related to
+logging and UI integration. The essence of the login process resides in the
+`login_post()` function. Given its simplicity and brevity, you should find it
+straightforward to tailor the login procedure to your needs.
+
 ## Author
 
 Andreas Jung <info@zopyx.com>
