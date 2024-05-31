@@ -57,8 +57,6 @@ async def logout(
 @router.post("/login")
 async def login_post(
     request: Request,
-    username: str = Form(...),
-    password: str = Form(...),
 ):
     for authenticator in AUTHENTICATOR_REGISTRY.authenticators:
         LOG.debug(f"Trying to authenticate with {authenticator.name}")
@@ -78,7 +76,6 @@ async def login_post(
 
     else:
         message = "You could not be logged in. Please try again."
-        LOG.error(message)
         return templates.TemplateResponse(
             request,
             "login.html",
