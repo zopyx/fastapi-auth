@@ -14,7 +14,11 @@ An opionated authentication and authorization system for FastAPI.
 
 ## Status
 
-- experimental
+- in production
+
+## Requirements
+
+- supports Python 3.10-3.12 (no support for Python 3.9 or lower, no support for Python 3.13 yet)
 
 ## Example usage
 
