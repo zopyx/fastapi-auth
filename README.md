@@ -11,6 +11,7 @@ An opionated authentication and authorization system for FastAPI.
 - fully tested, full test coverage, full mypy compliance, parameter checks at runtime
 - a plugin system for arbitrary authentication/authorization (requires one class and one method to implement)
 
+![Tests](https://github.com/zopyx/fastapi-auth/actions/workflows/python-app.yml/badge.svg)
 
 ## Status
 
