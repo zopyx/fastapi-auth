@@ -169,13 +169,21 @@ default key as used in the code.
 
 ### AUTH_DB_URI
 
-`AUTH_DB_URI` must be set to a SQL database. `zopyx-fastapi-auth` uses `sqlmodel` under the hood which uses `SQLAlchemy`and all supported databases (see https://docs.sqlalchemy.org/en/20/core/engines.html#database-urls). 
+`AUTH_DB_URI` must be set to a SQL database. `zopyx-fastapi-auth` uses
+`sqlmodel` under the hood which uses `SQLAlchemy`and all supported databases
+(see https://docs.sqlalchemy.org/en/20/core/engines.html#database-urls). 
 
 Example for using a SQLite database `users.db` inside the current working directory:
 
 ```
 export AUTH_DB_URI=sqlite:///users.db
 ```
+
+### AUTH_LOG_FILENAME
+
+By default, the module logs output to the console and to the `fastpi_auth.log`.
+You can use a different filename by setting the `AUTH_LOG_FILENAME` environment
+variable.
 
 ## Internals
 
