@@ -1,4 +1,4 @@
-name: Python application test with pytest
+name: pytest tests for all supported Python versions
 
 on:
   push:
