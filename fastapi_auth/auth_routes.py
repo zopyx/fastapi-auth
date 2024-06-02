@@ -1,13 +1,13 @@
 from typing import Optional
 
-from fastapi import Depends, Form, Request, APIRouter
+from fastapi import Depends, Request, APIRouter
 from fastapi.responses import HTMLResponse, RedirectResponse
 from starlette import status
 
 from .dependencies import get_user
 from .logger import LOG
 from .users import User, ANONYMOUS_USER
-from .user_management_sqlobject import get_user_from_fastapi_request, authenticate_user_for_fastapi
+from .user_management_sqlobject import authenticate_user_for_fastapi
 from .jinja2_templates import templates
 
 from starlette.middleware.sessions import SessionMiddleware

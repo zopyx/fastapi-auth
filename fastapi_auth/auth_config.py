@@ -8,6 +8,7 @@ DEFAULT_DB_URI = "sqlite:///user_management.db"
 class AuthConfig(BaseSettings):
     secret_key: SecretStr = DEFAULT_KEY
     db_uri: str = DEFAULT_DB_URI
+    log_filename: str = "fastpi_auth.log"
 
     class Config:
         env_prefix = "AUTH_"
