@@ -194,7 +194,7 @@ is stored through a  signed cookie-based HTTP session. Session information is
 readable but not modifiable. The encryption key can be configured through an environment
 variable.
 
-## Getting started with the include mini demo application
+## Getting started with the included mini demo application
 
 ### Installation
 
