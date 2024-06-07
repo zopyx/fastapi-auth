@@ -7,6 +7,7 @@ from starlette import status
 from .dependencies import get_user
 from .logger import LOG
 from .users import User, ANONYMOUS_USER, SUPER_USER
+from .roles import ROLES_REGISTRY
 from .user_management_sqlobject import authenticate_user_for_fastapi
 from .jinja2_templates import templates
 
@@ -59,6 +60,7 @@ async def login_post(
     request: Request,
 ):
     if AUTH_SETTINGS.always_superuser:
+        SUPER_USER.roles = ROLES_REGISTRY.all_roles()
         authenticate_user_for_fastapi(user=SUPER_USER, request=request)
         message = "You are now logged in as superuser."
         LOG.info(f"User {SUPER_USER.name} logged in")
