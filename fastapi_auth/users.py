@@ -78,3 +78,9 @@ ANONYMOUS_USER = User(
     description="Anonymous user",
     is_anonymous=True,
 )
+
+SUPER_USER = User(
+    name="superuser",
+    description="Superuser",
+    is_anonymous=False,
+)
