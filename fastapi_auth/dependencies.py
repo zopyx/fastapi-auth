@@ -1,5 +1,5 @@
 from fastapi import Request, Depends
-from typing import Optional
+from typing import Optional, Callable
 from fastapi.exceptions import HTTPException
 from typeguard import typechecked
 
@@ -38,22 +38,28 @@ class Protected:
         self,
         required_permission: Optional[Permission] = None,
         required_roles: Optional[list[Role]] = None,
+        required_checker: Optional[Callable] = None,
     ):
         if required_roles is None:
             required_roles = []
 
-        if all([required_permission, required_roles]):
-            raise ValueError("required_permission and required_role are mutual exclusive")
+        if all([required_permission, required_roles, required_checker]):
+            raise ValueError("required_permission and required_role and required_checker are all mutual exclusive")
 
-        if not required_permission and not required_roles:
-            raise ValueError("Either required_permission or required_role must be given")
+        if len(list(filter(None, [required_permission, required_roles, required_checker]))) > 1:
+            raise ValueError("required_permission and required_role and required_checker are all mutual exclusive")
+
+        if len(list(filter(None, [required_permission, required_roles, required_checker]))) == 0:
+            raise ValueError("required_permission or required_role or required_checker must be given")
 
         self.required_permission = required_permission
         self.required_roles = required_roles
+        self.required_checker = required_checker
 
     @typechecked
     def __call__(
         self,
+        request: Request,
         user: User = Depends(get_user),
     ) -> User:
         # check for roles
@@ -67,6 +73,10 @@ class Protected:
             if user.has_permission(self.required_permission):
                 return user
 
-        msg = f"Permission denied for user {user}. Required roles: {self.required_roles}, required permission: {self.required_permission}. User has role {user.roles}"
+        if self.required_checker:
+            if self.required_checker(user=user, request=request):
+                return user
+
+        msg = f"Permission denied for user {user}. Required roles: {self.required_roles}, required permission: {self.required_permission}. Required checker: {self.required_checker}. User has role {user.roles}"
         LOG.error(msg)
         raise HTTPException(status_code=403, detail=msg)

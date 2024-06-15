@@ -105,3 +105,12 @@ def admin(user: User = Depends(Protected(required_roles=[ADMIN_ROLE]))):
 @app.get("/admin2")
 def admin2(user: User = Depends(Protected(required_permission=VIEW_PERMISSION))):
     return {"user": user}
+
+
+def username_must_be_admin(user: User, request: Request) -> bool:
+    return user.name == "admin"
+
+
+@app.get("/admin3")
+def admin3(user: User = Depends(Protected(required_checker=username_must_be_admin))):
+    return {"user": user}
