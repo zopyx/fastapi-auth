@@ -107,6 +107,27 @@ def admin2(user: User = Depends(Protected(required_permission=VIEW_PERMISSION)))
 
 ```
 
+Another option is to protect a route with a custom callback method returning `True` or `False` for a given
+`Request` and `User`:
+
+```
+from fastapi_auth.dependencies import Protected
+
+def my_check(request: Request, user: User) -> bool:
+    # perform some checks based on request and/or user....
+    return True # or False
+
+@app.get("/admin")
+def admin3(user: User = Depends(Protected(required_checker=my_check))):
+    return {"user": user}
+```
+
+Note that the `user` object passed to the callback is either an already
+authenticated users or the `ANONYMOUS_USER`.  It is up to the callback to
+authorize the already authenticated user based on further criteria.
+
+
+
 ## Installation of the session middleware
 
 In order to instrumentize your application, you need call `install_middleware(app)` with your
