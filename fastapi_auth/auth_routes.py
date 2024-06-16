@@ -70,7 +70,7 @@ async def login_post(
         LOG.debug(f"Trying to authenticate with {authenticator.name}")
         try:
             user = await authenticator.authenticate(request)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             LOG.error(f"Error authenticating with {authenticator.name}: {e}")
             user = None
         if user:
