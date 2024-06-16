@@ -5,6 +5,7 @@ from .conftest import admin_username, admin_password
 from ..dependencies import Protected
 from ..roles import Role
 from ..permissions import Permission
+from ..auth_config import AUTH_SETTINGS
 
 
 def test_Protected():
@@ -61,3 +62,14 @@ def test_protected_via_admin3_anonymous(user_management, test_client):
     test_client.get("/auth/logout")
     response = test_client.get("/admin3")
     assert response.status_code == 403
+
+
+def test_bypass_security(user_management, test_client):
+    test_client.get("/auth/logout")
+
+    AUTH_SETTINGS.always_superuser = True
+    response = test_client.post("/auth/login", data={"username": admin_username, "password": admin_password})
+
+    response = test_client.get("/admin")
+    assert response.status_code == HTTP_200_OK
+    AUTH_SETTINGS.always_superuser = False
