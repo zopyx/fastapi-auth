@@ -43,9 +43,6 @@ class Protected:
         if required_roles is None:
             required_roles = []
 
-        if all([required_permission, required_roles, required_checker]):
-            raise ValueError("required_permission and required_role and required_checker are all mutual exclusive")
-
         if len(list(filter(None, [required_permission, required_roles, required_checker]))) > 1:
             raise ValueError("required_permission and required_role and required_checker are all mutual exclusive")
 
