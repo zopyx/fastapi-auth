@@ -1,0 +1,7 @@
+0.2.3 (2024/06/18)
+------------------
+
+- various internal fixes and refactorings
+- full coverage
+- fully ruff-ed
+- updated code for Protected() dependency
