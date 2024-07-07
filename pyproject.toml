@@ -18,6 +18,7 @@ dependencies = [
     "uvicorn",
     "markdown",
     "starlette-session",
+    "starlette-securecookies",
     "loguru",
     "bcrypt",
     "jinja2",
