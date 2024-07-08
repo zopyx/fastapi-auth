@@ -102,6 +102,9 @@ def admin(user: User = Depends(Protected(required_roles=[ADMIN_ROLE]))):
     return {"user": user}
 
 
+# This is an endpoint that requires the user to be authenticated.  In this case,
+# the user must have the VIEW_PERMISSION permission.  It is also possible to require a
+# role instead.  Use the Protected dependency to require authentication.
 @app.get("/admin2")
 def admin2(user: User = Depends(Protected(required_permission=VIEW_PERMISSION))):
     return {"user": user}
@@ -111,6 +114,8 @@ def username_must_be_admin(user: User, request: Request) -> bool:
     return user.name == "admin"
 
 
+# This is an endpoint that requires the user to be authenticated.  In this case,
+# the user must have the username "admin".
 @app.get("/admin3")
 def admin3(user: User = Depends(Protected(required_checker=username_must_be_admin))):
     return {"user": user}
