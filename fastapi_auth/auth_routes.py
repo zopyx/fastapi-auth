@@ -12,7 +12,6 @@ from .user_management_sqlobject import authenticate_user_for_fastapi
 from .jinja2_templates import templates
 
 from starlette.middleware.sessions import SessionMiddleware
-from securecookies import SecureCookiesMiddleware
 
 
 from .auth_config import AUTH_SETTINGS
@@ -27,8 +26,7 @@ router = APIRouter()
 
 def install_middleware(app):
     app.add_middleware(SessionMiddleware, secret_key=AUTH_SETTINGS.secret_key.get_secret_value())
-#    app.add_middleware(SecureCookiesMiddleware, secrets=[AUTH_SETTINGS.secret_key.get_secret_value()])
-    app.add_middleware(SecureCookiesMiddleware, secrets=[b'ZmDfcTF7_60GrrY167zsiPd67pEvs0aGOv2oasOM1Pg='])
+
 
 @router.get("/login", response_class=HTMLResponse)
 async def login(
