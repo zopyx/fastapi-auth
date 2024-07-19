@@ -11,8 +11,9 @@ class AuthConfig(BaseSettings):
     log_filename: str = "fastpi_auth.log"
     always_superuser: bool = False
 
-    class Config:
-        env_prefix = "AUTH_"
+    model_config = ConfigDict(
+        env_prefix="AUTH_",
+    )
 
 
 AUTH_SETTINGS = AuthConfig()
